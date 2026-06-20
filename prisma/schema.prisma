@@ -1,0 +1,218 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User & Auth Configuration
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         String    @default("agent") // admin, manager, agent
+  avatar       String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relationships
+  contacts     Contact[] @relation("AssignedContacts")
+  deals        Deal[]    @relation("AssignedDeals")
+  tasks        Task[]    @relation("AssignedTasks")
+}
+
+// Contacts & Leads
+model Contact {
+  id           String    @id @default(uuid())
+  name         String
+  phone        String?   @unique
+  email        String?   @unique
+  whatsapp     Boolean   @default(false)
+  company      String?
+  source       String?   @default("Meta Ads")
+  leadScore    Int       @default(0)
+  stage        String    @default("new") // new, engaged, qualified, won, lost
+  clientId     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relationships
+  assignedToId String?
+  assignedTo   User?     @relation("AssignedContacts", fields: [assignedToId], references: [id], onDelete: SetNull)
+  deals        Deal[]
+  tasks        Task[]
+  emailLogs    EmailLog[]
+}
+
+// Deals & Sales Pipeline
+model Deal {
+  id            String    @id @default(uuid())
+  contactId     String
+  contact       Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  title         String
+  value         Float     @default(0.0)
+  stage         String    @default("new") // new, engaged, qualified, proposal, negotiation, won, lost
+  expectedClose DateTime?
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relationships
+  assignedToId  String?
+  assignedTo    User?      @relation("AssignedDeals", fields: [assignedToId], references: [id], onDelete: SetNull)
+  contracts     Contract[]
+  quotes        Quote[]
+  tasks         Task[]
+}
+
+// Revenue Hub - Contracts
+model Contract {
+  id        String    @id @default(uuid())
+  dealId    String
+  deal      Deal      @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  content   String
+  status    String    @default("draft") // draft, sent, signed, cancelled
+  signedAt  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// Revenue Hub - Quotes
+model Quote {
+  id        String    @id @default(uuid())
+  dealId    String
+  deal      Deal      @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  lineItems Json      // Array of items with description, quantity, rate
+  tax       Float     @default(0.0)
+  discount  Float     @default(0.0)
+  total     Float
+  status    String    @default("draft") // draft, sent, accepted, rejected
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  invoices  Invoice[]
+}
+
+// Revenue Hub - Invoices
+model Invoice {
+  id               String    @id @default(uuid())
+  quoteId          String
+  quote            Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  stripeInvoiceId  String?   @unique
+  status           String    @default("draft") // draft, sent, paid, overdue, void
+  dueDate          DateTime
+  paidAt           DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  payments         Payment[]
+}
+
+// Revenue Hub - Payments
+model Payment {
+  id              String   @id @default(uuid())
+  invoiceId       String
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  stripePaymentId String?  @unique
+  amount          Float
+  receivedAt      DateTime @default(now())
+}
+
+// Email Marketing - Templates
+model EmailTemplate {
+  id             String          @id @default(uuid())
+  name           String
+  htmlBody       String
+  variables      Json?           // Array of string placeholders
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  emailCampaigns EmailCampaign[]
+}
+
+// Email Marketing - Campaigns
+model EmailCampaign {
+  id           String        @id @default(uuid())
+  name         String
+  subject      String
+  templateId   String
+  template     EmailTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  sequenceStep Int           @default(1)
+  status       String        @default("draft") // draft, scheduling, active, completed, paused
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  emailLogs    EmailLog[]
+}
+
+// Email Marketing - Execution Logs
+model EmailLog {
+  id         String        @id @default(uuid())
+  campaignId String
+  campaign   EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contactId  String
+  contact    Contact       @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  sentAt     DateTime      @default(now())
+  openedAt   DateTime?
+  clickedAt  DateTime?
+}
+
+// Social & Content Scheduler
+model SocialPost {
+  id          String    @id @default(uuid())
+  platform    String    // facebook, instagram, linkedin, twitter
+  content     String
+  mediaUrl    String?
+  scheduledAt DateTime
+  publishedAt DateTime?
+  status      String    @default("scheduled") // scheduled, publishing, published, failed
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// Workspace - Tasks
+model Task {
+  id           String    @id @default(uuid())
+  contactId    String?
+  contact      Contact?  @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  dealId       String?
+  deal         Deal?     @relation(fields: [dealId], references: [id], onDelete: Cascade)
+  title        String
+  description  String?
+  priority     String    @default("medium") // low, medium, high, urgent
+  status       String    @default("todo") // todo, in_progress, done
+  dueDate      DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relationships
+  assignedToId String?
+  assignedTo   User?     @relation("AssignedTasks", fields: [assignedToId], references: [id], onDelete: SetNull)
+}
+
+// System - Automation Logs
+model AutomationLog {
+  id        String   @id @default(uuid())
+  workflow  String
+  trigger   String
+  payload   Json
+  result    Json?
+  createdAt DateTime @default(now())
+}
+
+// System - SEO & Keyword tracking
+model SEOKeyword {
+  id          String   @id @default(uuid())
+  keyword     String
+  currentRank Int
+  prevRank    Int?
+  trackedAt   DateTime @default(now())
+}
+
+// System - AI Answer Engine (AEO) visibility
+model AEOEntry {
+  id             String   @id @default(uuid())
+  query          String
+  answerSource   String?
+  visibilityScore Int
+  checkedAt      DateTime @default(now())
+}
