@@ -32,7 +32,7 @@ const TIMELINE_STORIES = [
 export default function MarketingCalendarPage() {
   // Common State
   const [activeView, setActiveView] = useState<'Scheduling' | 'Content'>('Scheduling');
-  
+
   // Scheduling View State
   const [selectedDate, setSelectedDate] = useState<number>(24);
   const [currentMonth] = useState('June 2025');
@@ -90,7 +90,7 @@ export default function MarketingCalendarPage() {
     const visibleStories = TIMELINE_STORIES.map(story => {
       const sTs = new Date(story.start + 'T00:00:00Z').getTime();
       const eTs = new Date(story.end + 'T23:59:59Z').getTime();
-      
+
       if (eTs < startTs || sTs > endTs) return null;
 
       const clampedStart = Math.max(sTs, startTs);
@@ -117,27 +117,27 @@ export default function MarketingCalendarPage() {
             {activeView === 'Scheduling' ? 'Scheduling Calendar' : 'Content & Story Calendar'}
           </div>
           <div className="section-sub" style={{ fontSize: 14, marginTop: 6, marginLeft: 50 }}>
-            {activeView === 'Scheduling' 
-              ? 'Plan and coordinate granular posts across all marketing channels.' 
+            {activeView === 'Scheduling'
+              ? 'Plan and coordinate granular posts across all marketing channels.'
               : 'High-level visual roadmap for major content pieces and campaigns.'}
           </div>
         </div>
-        
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           {/* Toggle Switch */}
           <div style={{ display: 'flex', background: 'var(--bg-card)', padding: 4, borderRadius: 10, border: '1px solid var(--border)', boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)' }}>
-            <button 
+            <button
               onClick={() => setActiveView('Scheduling')}
-              style={{ 
-                padding: '8px 16px', 
-                fontSize: 13, 
-                fontWeight: 600, 
-                border: 'none', 
-                background: activeView === 'Scheduling' ? 'var(--bg-secondary)' : 'transparent', 
-                color: activeView === 'Scheduling' ? 'var(--text-primary)' : 'var(--text-muted)', 
-                borderRadius: 8, 
-                cursor: 'pointer', 
-                boxShadow: activeView === 'Scheduling' ? '0 2px 4px rgba(0,0,0,0.2)' : 'none', 
+              style={{
+                padding: '8px 16px',
+                fontSize: 13,
+                fontWeight: 600,
+                border: 'none',
+                background: activeView === 'Scheduling' ? 'var(--bg-secondary)' : 'transparent',
+                color: activeView === 'Scheduling' ? 'var(--text-primary)' : 'var(--text-muted)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                boxShadow: activeView === 'Scheduling' ? '0 2px 4px rgba(0,0,0,0.2)' : 'none',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 display: 'flex',
                 alignItems: 'center',
@@ -146,18 +146,18 @@ export default function MarketingCalendarPage() {
             >
               <i className="ti ti-calendar"></i> Scheduling
             </button>
-            <button 
+            <button
               onClick={() => setActiveView('Content')}
-              style={{ 
-                padding: '8px 16px', 
-                fontSize: 13, 
-                fontWeight: 600, 
-                border: 'none', 
-                background: activeView === 'Content' ? 'var(--bg-secondary)' : 'transparent', 
-                color: activeView === 'Content' ? 'var(--text-primary)' : 'var(--text-muted)', 
-                borderRadius: 8, 
-                cursor: 'pointer', 
-                boxShadow: activeView === 'Content' ? '0 2px 4px rgba(0,0,0,0.2)' : 'none', 
+              style={{
+                padding: '8px 16px',
+                fontSize: 13,
+                fontWeight: 600,
+                border: 'none',
+                background: activeView === 'Content' ? 'var(--bg-secondary)' : 'transparent',
+                color: activeView === 'Content' ? 'var(--text-primary)' : 'var(--text-muted)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                boxShadow: activeView === 'Content' ? '0 2px 4px rgba(0,0,0,0.2)' : 'none',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 display: 'flex',
                 alignItems: 'center',
@@ -169,7 +169,7 @@ export default function MarketingCalendarPage() {
           </div>
 
           <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 8 }}>
-             <i className="ti ti-plus"></i> Schedule Post
+            <i className="ti ti-plus"></i> Schedule Post
           </button>
         </div>
       </div>
@@ -185,18 +185,18 @@ export default function MarketingCalendarPage() {
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-primary)', margin: 0, letterSpacing: '0.5px' }}>{currentMonth}</h2>
                 <button className="btn btn-ghost" style={{ padding: '8px', borderRadius: '50%' }}><i className="ti ti-chevron-right" style={{ fontSize: 18 }}></i></button>
               </div>
-              
+
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 10, flex: 1 }}>
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
                   <div key={d} style={{ fontSize: 12, color: 'var(--text-muted)', textAlign: 'center', fontWeight: 700, paddingBottom: 12, textTransform: 'uppercase', letterSpacing: '1px' }}>{d}</div>
                 ))}
-                
+
                 {days.map((d, i) => {
                   if (d.empty) return <div key={i} />;
                   const isSelected = selectedDate === d.day;
                   return (
-                    <div 
-                      key={i} 
+                    <div
+                      key={i}
                       className="cal-day-item"
                       onClick={() => setSelectedDate(d.day!)}
                       style={{
@@ -214,8 +214,8 @@ export default function MarketingCalendarPage() {
                         alignItems: 'flex-start',
                       }}
                     >
-                      <span style={{ 
-                        fontSize: 14, 
+                      <span style={{
+                        fontSize: 14,
                         fontWeight: isSelected || d.isToday ? 700 : 600,
                         color: isSelected ? 'var(--purple-light)' : (d.isToday ? 'var(--text-primary)' : 'var(--text-secondary)'),
                         background: d.isToday && !isSelected ? 'var(--border)' : 'transparent',
@@ -224,16 +224,16 @@ export default function MarketingCalendarPage() {
                       }}>
                         {d.day}
                       </span>
-                      
+
                       {/* Event Indicators */}
                       {d.events && d.events.length > 0 && (
                         <div style={{ marginTop: 'auto', display: 'flex', flexWrap: 'wrap', gap: 4, width: '100%' }}>
                           {d.events.slice(0, 3).map((evt, idx) => (
-                            <div key={idx} style={{ 
-                              height: 6, 
-                              flex: 1, 
+                            <div key={idx} style={{
+                              height: 6,
+                              flex: 1,
                               minWidth: 10,
-                              background: evt.color, 
+                              background: evt.color,
                               borderRadius: 4,
                               opacity: evt.status === 'Published' ? 0.4 : 1,
                               boxShadow: evt.status === 'Scheduled' ? `0 0 8px ${evt.color}40` : 'none'
@@ -276,7 +276,7 @@ export default function MarketingCalendarPage() {
                 </div>
                 <span className="badge" style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)' }}>{selectedEvents.length} items</span>
               </div>
-              
+
               <div style={{ display: 'flex', flexDirection: 'column', gap: 14, overflowY: 'auto', flex: 1, paddingRight: 8 }} className="scrollbar-thin">
                 {selectedEvents.length === 0 ? (
                   <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)', border: '2px dashed var(--border)', borderRadius: 16, background: 'rgba(255,255,255,0.02)' }}>
@@ -289,10 +289,10 @@ export default function MarketingCalendarPage() {
                   </div>
                 ) : (
                   selectedEvents.map(evt => (
-                    <div key={evt.id} style={{ 
-                      padding: 18, 
-                      background: 'var(--bg-card)', 
-                      border: '1px solid var(--border)', 
+                    <div key={evt.id} style={{
+                      padding: 18,
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border)',
                       borderRadius: 14,
                       position: 'relative',
                       overflow: 'hidden',
@@ -311,7 +311,7 @@ export default function MarketingCalendarPage() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 13, color: 'var(--text-secondary)' }}>
                         <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 500 }}><i className="ti ti-clock" style={{ color: 'var(--text-muted)' }}></i> {evt.time}</span>
                         <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontWeight: 500 }}>
-                          <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: 'var(--text-primary)' }}><i className="ti ti-user"></i></div> 
+                          <div style={{ width: 18, height: 18, borderRadius: '50%', background: 'var(--bg-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: 'var(--text-primary)' }}><i className="ti ti-user"></i></div>
                           {evt.author}
                         </span>
                       </div>
@@ -381,108 +381,108 @@ export default function MarketingCalendarPage() {
         /* Content / Story Timeline View */
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div className="card" style={{ padding: '32px 24px', overflowX: 'auto', display: 'flex', flexDirection: 'column' }}>
-            
+
             {/* Timeline Filter Controls */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                 <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--emerald-dim)', color: 'var(--emerald)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <i className="ti ti-timeline" style={{ fontSize: 24 }}></i>
-                 </div>
-                 <div>
-                   <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>Campaign Timeline</h3>
-                   <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>Visualize marketing efforts over time</div>
-                 </div>
-               </div>
-               <div style={{ display: 'flex', gap: 8, background: 'var(--bg-secondary)', padding: 4, borderRadius: 12, border: '1px solid var(--border)' }}>
-                  {['1 Week', '1 Month', '3 Months', '6 Months', '1 Year'].map(rng => (
-                    <button 
-                      key={rng}
-                      onClick={() => setTimeRange(rng as any)}
-                      style={{ 
-                        padding: '6px 14px', 
-                        borderRadius: 8, 
-                        fontSize: 13, 
-                        fontWeight: 600,
-                        border: 'none',
-                        background: timeRange === rng ? 'var(--bg-card)' : 'transparent',
-                        color: timeRange === rng ? 'var(--text-primary)' : 'var(--text-secondary)',
-                        boxShadow: timeRange === rng ? '0 2px 6px rgba(0,0,0,0.1)' : 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
-                      }}
-                    >{rng}</button>
-                  ))}
-               </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 10, background: 'var(--emerald-dim)', color: 'var(--emerald)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <i className="ti ti-timeline" style={{ fontSize: 24 }}></i>
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: 'var(--text-primary)' }}>Campaign Timeline</h3>
+                  <div style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 4 }}>Visualize marketing efforts over time</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 8, background: 'var(--bg-secondary)', padding: 4, borderRadius: 12, border: '1px solid var(--border)' }}>
+                {['1 Week', '1 Month', '3 Months', '6 Months', '1 Year'].map(rng => (
+                  <button
+                    key={rng}
+                    onClick={() => setTimeRange(rng as any)}
+                    style={{
+                      padding: '6px 14px',
+                      borderRadius: 8,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      border: 'none',
+                      background: timeRange === rng ? 'var(--bg-card)' : 'transparent',
+                      color: timeRange === rng ? 'var(--text-primary)' : 'var(--text-secondary)',
+                      boxShadow: timeRange === rng ? '0 2px 6px rgba(0,0,0,0.1)' : 'none',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                    }}
+                  >{rng}</button>
+                ))}
+              </div>
             </div>
 
             <div style={{ minWidth: 800 }}>
-               {/* Gantt Header */}
-               <div style={{ display: 'flex', borderBottom: '2px solid var(--border)', paddingBottom: 16, marginBottom: 24 }}>
-                 <div style={{ width: 240, flexShrink: 0, fontSize: 13, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Campaigns</div>
-                 <div style={{ flex: 1, display: 'flex' }}>
-                   {timelineData.columns.map((col, idx) => (
-                     <div key={idx} style={{ flex: col.flex, textAlign: 'center', fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', borderLeft: idx === 0 ? 'none' : '1px solid var(--border-bright)', paddingLeft: 8 }}>
-                       {col.label}
-                     </div>
-                   ))}
-                 </div>
-               </div>
-               
-               {/* Gantt Rows */}
-               <div style={{ display: 'flex', flexDirection: 'column', gap: 24, position: 'relative' }}>
-                 
-                 {/* Faint background grid lines corresponding to columns */}
-                 <div style={{ position: 'absolute', top: 0, bottom: 0, left: 240, right: 0, display: 'flex', pointerEvents: 'none' }}>
-                   {timelineData.columns.map((col, i) => (
-                     <div key={i} style={{ flex: col.flex, borderLeft: i === 0 ? 'none' : '1px dashed rgba(255,255,255,0.05)', height: '100%' }} />
-                   ))}
-                 </div>
+              {/* Gantt Header */}
+              <div style={{ display: 'flex', borderBottom: '2px solid var(--border)', paddingBottom: 16, marginBottom: 24 }}>
+                <div style={{ width: 240, flexShrink: 0, fontSize: 13, fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Campaigns</div>
+                <div style={{ flex: 1, display: 'flex' }}>
+                  {timelineData.columns.map((col, idx) => (
+                    <div key={idx} style={{ flex: col.flex, textAlign: 'center', fontSize: 13, fontWeight: 700, color: 'var(--text-secondary)', borderLeft: idx === 0 ? 'none' : '1px solid var(--border-bright)', paddingLeft: 8 }}>
+                      {col.label}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-                 {timelineData.stories.length === 0 ? (
-                   <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)', fontSize: 15, fontWeight: 500 }}>No campaigns found in this time range.</div>
-                 ) : (
-                   timelineData.stories.map((evt, idx) => (
-                     <div key={idx} style={{ display: 'flex', alignItems: 'center', position: 'relative', zIndex: 1 }} className="timeline-row">
-                       <div style={{ width: 240, flexShrink: 0, paddingRight: 20 }}>
-                         <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>{evt.title}</div>
-                         <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{evt.owner}</div>
-                       </div>
-                       
-                       <div style={{ flex: 1, position: 'relative', height: 42 }}>
-                          <div className="hover-lift" onClick={() => setSelectedStoryId(evt.id)} style={{ 
-                            position: 'absolute',
-                            left: `${evt.left}%`,
-                            width: `${evt.width}%`,
-                            background: evt.color, 
-                            height: '100%', 
-                            borderRadius: evt.isCutLeft && evt.isCutRight ? 6 : (evt.isCutLeft ? '0 21px 21px 0' : (evt.isCutRight ? '21px 0 0 21px' : 21)), 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            color: '#fff', 
-                            fontSize: 13, 
-                            fontWeight: 600, 
-                            boxShadow: `0 4px 12px rgba(0,0,0,0.15)`,
-                            cursor: 'pointer',
-                            padding: '0 16px',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            opacity: (evt.isCutLeft || evt.isCutRight) ? 0.85 : 1,
-                            border: selectedStoryId === evt.id ? '2px solid #fff' : 'none',
-                            outline: selectedStoryId === evt.id ? `2px solid ${evt.color}` : 'none',
-                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
-                          }}>
-                             {evt.label}
-                          </div>
-                       </div>
-                     </div>
-                   ))
-                 )}
-               </div>
+              {/* Gantt Rows */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24, position: 'relative' }}>
+
+                {/* Faint background grid lines corresponding to columns */}
+                <div style={{ position: 'absolute', top: 0, bottom: 0, left: 240, right: 0, display: 'flex', pointerEvents: 'none' }}>
+                  {timelineData.columns.map((col, i) => (
+                    <div key={i} style={{ flex: col.flex, borderLeft: i === 0 ? 'none' : '1px dashed rgba(255,255,255,0.05)', height: '100%' }} />
+                  ))}
+                </div>
+
+                {timelineData.stories.length === 0 ? (
+                  <div style={{ padding: '60px', textAlign: 'center', color: 'var(--text-muted)', fontSize: 15, fontWeight: 500 }}>No campaigns found in this time range.</div>
+                ) : (
+                  timelineData.stories.map((evt, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', position: 'relative', zIndex: 1 }} className="timeline-row">
+                      <div style={{ width: 240, flexShrink: 0, paddingRight: 20 }}>
+                        <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>{evt.title}</div>
+                        <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>{evt.owner}</div>
+                      </div>
+
+                      <div style={{ flex: 1, position: 'relative', height: 42 }}>
+                        <div className="hover-lift" onClick={() => setSelectedStoryId(evt.id)} style={{
+                          position: 'absolute',
+                          left: `${evt.left}%`,
+                          width: `${evt.width}%`,
+                          background: evt.color,
+                          height: '100%',
+                          borderRadius: evt.isCutLeft && evt.isCutRight ? 6 : (evt.isCutLeft ? '0 21px 21px 0' : (evt.isCutRight ? '21px 0 0 21px' : 21)),
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#fff',
+                          fontSize: 13,
+                          fontWeight: 600,
+                          boxShadow: `0 4px 12px rgba(0,0,0,0.15)`,
+                          cursor: 'pointer',
+                          padding: '0 16px',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          opacity: (evt.isCutLeft || evt.isCutRight) ? 0.85 : 1,
+                          border: selectedStoryId === evt.id ? '2px solid #fff' : 'none',
+                          outline: selectedStoryId === evt.id ? `2px solid ${evt.color}` : 'none',
+                          transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
+                        }}>
+                          {evt.label}
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
-          
+
           {selectedStoryId && TIMELINE_STORIES.find(s => s.id === selectedStoryId) && (() => {
             const story = TIMELINE_STORIES.find(s => s.id === selectedStoryId)!;
             return (
@@ -497,32 +497,32 @@ export default function MarketingCalendarPage() {
                   </div>
                   <button onClick={() => setSelectedStoryId(null)} className="btn btn-ghost" style={{ padding: 8, borderRadius: '50%', background: 'var(--bg-secondary)' }}><i className="ti ti-x" style={{ fontSize: 20 }}></i></button>
                 </div>
-                
+
                 <p style={{ margin: 0, fontSize: 15, color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: '800px', fontWeight: 500 }}>
                   {story.description}
                 </p>
-                
+
                 <div style={{ display: 'flex', gap: 40, marginTop: 12, padding: '24px', background: 'var(--bg-secondary)', borderRadius: 16, border: '1px solid var(--border)' }}>
-                   <div>
-                     <div style={{ fontSize: 12, textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.5px' }}>Owner</div>
-                     <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                       <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--purple-dim)', color: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="ti ti-user"></i></div> 
-                       {story.owner}
-                     </div>
-                   </div>
-                   <div>
-                     <div style={{ fontSize: 12, textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.5px' }}>Budget</div>
-                     <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
-                       <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--emerald-dim)', color: 'var(--emerald)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="ti ti-currency-dollar"></i></div>
-                       {story.budget}
-                     </div>
-                   </div>
-                   <div>
-                     <div style={{ fontSize: 12, textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.5px' }}>Channels</div>
-                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                       {story.channels.map(c => <span key={c} className="badge" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', fontSize: 12, color: 'var(--text-primary)', padding: '6px 12px' }}>{c}</span>)}
-                     </div>
-                   </div>
+                  <div>
+                    <div style={{ fontSize: 12, textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.5px' }}>Owner</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--purple-dim)', color: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="ti ti-user"></i></div>
+                      {story.owner}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 12, textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.5px' }}>Budget</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--emerald-dim)', color: 'var(--emerald)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><i className="ti ti-currency-dollar"></i></div>
+                      {story.budget}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 12, textTransform: 'uppercase', color: 'var(--text-muted)', fontWeight: 700, marginBottom: 8, letterSpacing: '0.5px' }}>Channels</div>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      {story.channels.map(c => <span key={c} className="badge" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', fontSize: 12, color: 'var(--text-primary)', padding: '6px 12px' }}>{c}</span>)}
+                    </div>
+                  </div>
                 </div>
               </div>
             );
