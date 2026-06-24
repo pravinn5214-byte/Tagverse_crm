@@ -10,9 +10,9 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'dark',
-  setTheme: () => {},
-  resolvedTheme: 'dark',
+  theme: 'light',
+  setTheme: () => { },
+  resolvedTheme: 'light',
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {

@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
 
 const pageInfo: Record<string, { title: string; sub: string }> = {
@@ -30,6 +31,7 @@ interface Props { activePage: string; }
 export default function Topbar({ activePage }: Props) {
   const page = pageInfo[activePage] || { title: 'Tagverse CRM', sub: '' };
   const { theme, setTheme } = useTheme();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   return (
     <div className="topbar">
@@ -46,28 +48,83 @@ export default function Topbar({ activePage }: Props) {
           <span style={{ fontSize: 10, color: 'var(--text-muted)', marginLeft: 20, background: 'rgba(255,255,255,0.06)', padding: '1px 6px', borderRadius: 4 }}>⌘K</span>
         </div>
 
-        {/* Theme Switcher Button */}
-        <div className="theme-switcher">
-          {(['light', 'dark', 'system'] as const).map(t => (
-            <button
-              key={t}
-              onClick={() => setTheme(t)}
-              className={`theme-btn ${theme === t ? 'active' : ''}`}
-              title={`Switch to ${t} theme`}
-            >
-              <span className="theme-icon">
-                {t === 'light' ? '☀️' : t === 'dark' ? '🌙' : '💻'}
-              </span>
-              <span style={{ textTransform: 'capitalize' }}>{t}</span>
-            </button>
-          ))}
-        </div>
+
 
         <button className="btn btn-ghost" style={{ position: 'relative' }}>
           🔔
           <span style={{ position: 'absolute', top: 4, right: 4, width: 7, height: 7, background: 'var(--rose)', borderRadius: '50%', border: '1px solid var(--bg-secondary)' }} />
         </button>
 
+        <div style={{ position: 'relative' }}>
+          <div 
+            className="user-pill" 
+            style={{ marginLeft: '12px', cursor: 'pointer' }}
+            onClick={() => setIsProfileOpen(!isProfileOpen)}
+          >
+            <div className="user-avatar">JL</div>
+            <div className="user-info">
+              <div className="name">Jose L.</div>
+              <div className="role">Administrator</div>
+            </div>
+            <span style={{ fontSize: 12, color: 'var(--text-muted)', marginLeft: '8px', transform: isProfileOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▼</span>
+          </div>
+
+          {isProfileOpen && (
+            <div style={{
+              position: 'absolute',
+              top: 'calc(100% + 8px)',
+              right: 0,
+              width: 220,
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border)',
+              borderRadius: 12,
+              boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+              padding: '8px',
+              zIndex: 100,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4
+            }}>
+              <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border)', marginBottom: 4 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-primary)' }}>Jose L.</div>
+                <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>jose@tagverse.com</div>
+              </div>
+              {[
+                { icon: '👤', label: 'My Profile' },
+                { icon: '⚙️', label: 'Account Settings' },
+                { icon: '💳', label: 'Billing & Plan' },
+              ].map((item, i) => (
+                <div key={i} style={{ padding: '8px 12px', fontSize: 13, color: 'var(--text-secondary)', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 10 }} className="dropdown-item hover-bg">
+                  <span>{item.icon}</span>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+              <div style={{ padding: '8px 12px' }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 0.5 }}>Appearance</div>
+                <div className="theme-switcher" style={{ width: '100%', padding: 4, display: 'flex' }}>
+                  {(['light', 'dark', 'system'] as const).map(t => (
+                    <button
+                      key={t}
+                      onClick={(e) => { e.stopPropagation(); setTheme(t); }}
+                      className={`theme-btn ${theme === t ? 'active' : ''}`}
+                      title={`Switch to ${t} theme`}
+                      style={{ flex: 1, justifyContent: 'center' }}
+                    >
+                      <span className="theme-icon">
+                        {t === 'light' ? '☀️' : t === 'dark' ? '🌙' : '💻'}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{ height: 1, background: 'var(--border)', margin: '4px 0' }} />
+              <div style={{ padding: '8px 12px', fontSize: 13, color: 'var(--rose)', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', gap: 10 }} className="dropdown-item hover-bg">
+                <span>🚪</span>
+                <span>Sign out</span>
+              </div>
+            </div>
+          )}
+        </div>
 
       </div>
     </div>

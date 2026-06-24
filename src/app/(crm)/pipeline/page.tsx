@@ -165,25 +165,25 @@ export default function PipelinePage() {
       {/* Kanban Board */}
       {view === 'kanban' && (
         <div style={{ overflowX: 'auto', paddingBottom: 8 }}>
-          <div style={{ display: 'flex', gap: 12, minWidth: 'max-content' }}>
+          <div style={{ display: 'flex', gap: 16, minWidth: 'max-content' }}>
             {pipelineState.map(col => (
-              <div key={col.id} style={{ width: 220, flexShrink: 0 }}>
+              <div key={col.id} style={{ width: 300, flexShrink: 0 }}>
                 {/* Column Header */}
-                <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${col.headerColor}`, borderRadius: '10px 10px 0 0', padding: '10px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-secondary)' }}>{col.label}</span>
-                  <span className={`pipeline-col-count ${col.color}`} style={{ background: `${col.headerColor}22`, color: col.headerColor, fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 8 }}>{col.deals.length}</span>
+                <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderTop: `3px solid ${col.headerColor}`, borderRadius: '10px 10px 0 0', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-secondary)' }}>{col.label}</span>
+                  <span className={`pipeline-col-count ${col.color}`} style={{ background: `${col.headerColor}22`, color: col.headerColor, fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 8 }}>{col.deals.length}</span>
                 </div>
                 {/* Deals */}
-                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '8px', display: 'flex', flexDirection: 'column', gap: 8, minHeight: 120 }}>
+                <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', borderTop: 'none', borderRadius: '0 0 10px 10px', padding: '12px', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 120 }}>
                   {col.deals.map(deal => (
-                    <div key={deal.id} className="deal-card" style={{ position: 'relative' }} onClick={() => openModalForEdit(col.id, deal)}>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 2 }}>{deal.name}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8 }}>{deal.company}</div>
+                    <div key={deal.id} className="deal-card" style={{ position: 'relative', padding: '14px' }} onClick={() => openModalForEdit(col.id, deal)}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 4 }}>{deal.name}</div>
+                      <div style={{ fontSize: 12, color: 'var(--text-muted)', marginBottom: 12 }}>{deal.company}</div>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--emerald-light)' }}>{fmtVal(deal.value)}</span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <span style={{ fontSize: 10, color: deal.days > 10 ? 'var(--rose-light)' : 'var(--text-muted)' }}>{deal.days}d</span>
-                          <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'linear-gradient(135deg, var(--purple), var(--blue))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 8, fontWeight: 700, color: 'white' }}>{deal.owner}</div>
+                        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--emerald-light)' }}>{fmtVal(deal.value)}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <span style={{ fontSize: 11, color: deal.days > 10 ? 'var(--rose-light)' : 'var(--text-muted)' }}>{deal.days}d</span>
+                          <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'linear-gradient(135deg, var(--purple), var(--blue))', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 9, fontWeight: 700, color: 'white' }}>{deal.owner}</div>
                         </div>
                       </div>
                       {/* Delete button */}

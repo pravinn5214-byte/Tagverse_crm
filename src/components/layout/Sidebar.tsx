@@ -83,6 +83,7 @@ export default function Sidebar() {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     crm: true,
   });
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const toggleGroup = (id: string) => {
     setOpenGroups(prev => ({ ...prev, [id]: !prev[id] }));
@@ -92,25 +93,57 @@ export default function Sidebar() {
     <aside 
       className="sidebar"
       style={{ 
-        background: '#f4f7fb',
-        color: '#0f172a',
-        '--text-primary': '#0f172a',
-        '--text-secondary': '#334155',
-        '--text-muted': '#64748b',
-        '--border': '#e2e8f0',
-        '--bg-card-hover': 'rgba(0, 0, 0, 0.06)',
-        '--blue-dim': '#dbeafe',
-        '--blue-light': '#1d4ed8',
-        '--purple-dim': '#dbeafe',
-        '--purple-light': '#1d4ed8',
+        background: '#0b1120',
+        color: '#f8fafc',
+        '--sidebar-width': isCollapsed ? '72px' : '240px',
+        transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        '--text-primary': '#f8fafc',
+        '--text-secondary': '#94a3b8',
+        '--text-muted': '#475569',
+        '--border': '#1e293b',
+        '--bg-card': '#0f172a',
+        '--bg-card-hover': '#1e293b',
+        '--blue-dim': '#2563eb',
+        '--blue-light': '#ffffff',
+        '--purple-dim': '#1e1b4b',
+        '--purple-light': '#a855f7',
       } as React.CSSProperties}
     >
       <div className="sidebar-logo">
         <div className="logo-mark" style={{ background: '#1d4ed8', color: '#ffffff', boxShadow: 'none' }}>T</div>
-        <div>
+        <div style={{
+          opacity: isCollapsed ? 0 : 1,
+          maxWidth: isCollapsed ? 0 : 200,
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}>
           <div className="logo-text">Tagverse</div>
           <div className="logo-sub">CRM Platform</div>
         </div>
+        <button 
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          style={{
+            marginLeft: isCollapsed ? 0 : 'auto',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border)',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            width: 24,
+            height: 24,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 6,
+            transition: 'all 0.2s',
+            userSelect: 'none',
+            outline: 'none'
+          }}
+          className="hover-bg"
+          title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        >
+          {isCollapsed ? '»' : '«'} 
+        </button>
       </div>
 
       <div className="sidebar-content" style={{ overflowY: 'auto', padding: '12px 8px' }}>
@@ -122,10 +155,18 @@ export default function Sidebar() {
                 key={item.id}
                 href={item.path}
                 className={`sidebar-item ${isActive ? 'active' : ''}`}
-                style={{ textDecoration: 'none' }}
+                style={{ textDecoration: 'none', justifyContent: isCollapsed ? 'center' : 'flex-start' }}
+                title={isCollapsed ? item.label : undefined}
               >
                 <span className="icon">{item.icon}</span>
-                <span style={{ flex: 1 }}>{item.label}</span>
+                <span style={{ 
+                  opacity: isCollapsed ? 0 : 1,
+                  maxWidth: isCollapsed ? 0 : 200,
+                  overflow: 'hidden',
+                  whiteSpace: 'nowrap',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  marginLeft: isCollapsed ? 0 : 10
+                }}>{item.label}</span>
               </Link>
             );
           })}
@@ -136,35 +177,45 @@ export default function Sidebar() {
           return (
             <div key={group.id} className="sidebar-group" style={{ marginBottom: 8 }}>
               <button
-                onClick={() => toggleGroup(group.id)}
+                onClick={() => { if (!isCollapsed) toggleGroup(group.id); }}
                 className="sidebar-item"
                 style={{
                   width: '100%',
-                  background: isOpen ? 'var(--bg-card-hover)' : 'transparent',
+                  background: isOpen && !isCollapsed ? 'var(--bg-card-hover)' : 'transparent',
                   border: '1px solid',
-                  borderColor: isOpen ? 'var(--border)' : 'transparent',
+                  borderColor: isOpen && !isCollapsed ? 'var(--border)' : 'transparent',
                   textAlign: 'left',
                   fontFamily: 'inherit',
-                  justifyContent: 'space-between',
+                  justifyContent: isCollapsed ? 'center' : 'space-between',
                   padding: '10px',
                   borderRadius: '8px',
-                  cursor: 'pointer',
-                  color: isOpen ? 'var(--text-primary)' : 'var(--text-secondary)'
+                  cursor: isCollapsed ? 'default' : 'pointer',
+                  color: isOpen && !isCollapsed ? 'var(--text-primary)' : 'var(--text-secondary)'
                 }}
+                title={isCollapsed ? group.label : undefined}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: isCollapsed ? 'center' : 'flex-start', width: '100%' }}>
                   <span className="icon" style={{ fontSize: 16 }}>{group.icon}</span>
-                  <span style={{ fontWeight: 600 }}>{group.label}</span>
+                  <span style={{ 
+                    fontWeight: 600,
+                    opacity: isCollapsed ? 0 : 1,
+                    maxWidth: isCollapsed ? 0 : 200,
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}>{group.label}</span>
                 </div>
                 <span style={{
                   transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                  transition: 'transform 0.2s',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   fontSize: 10,
-                  opacity: 0.6
+                  opacity: isCollapsed ? 0 : 0.6,
+                  maxWidth: isCollapsed ? 0 : 20,
+                  overflow: 'hidden'
                 }}>▼</span>
               </button>
 
-              {isOpen && (
+              {isOpen && !isCollapsed && (
                 <div style={{
                   marginLeft: '20px',
                   paddingLeft: '12px',
@@ -207,21 +258,20 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar-footer">
-        <Link href="/settings" className="sidebar-item" style={{ textDecoration: 'none', marginBottom: 12 }}>
+        <Link href="/settings" className="sidebar-item" style={{ textDecoration: 'none', marginBottom: 12, justifyContent: isCollapsed ? 'center' : 'flex-start' }} title={isCollapsed ? "Settings" : undefined}>
           <span className="icon">⚙</span>
-          <span style={{ flex: 1 }}>
+          <span style={{ 
+            opacity: isCollapsed ? 0 : 1,
+            maxWidth: isCollapsed ? 0 : 200,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            marginLeft: isCollapsed ? 0 : 10
+          }}>
             <div style={{ fontWeight: 600 }}>Settings</div>
             <div style={{ fontSize: 9, opacity: 0.5, marginTop: 2, textTransform: 'uppercase' }}>System Configuration</div>
           </span>
         </Link>
-        <div className="user-pill">
-          <div className="user-avatar">JL</div>
-          <div className="user-info">
-            <div className="name">Jose L.</div>
-            <div className="role">Administrator</div>
-          </div>
-          <span style={{ fontSize: 12, color: 'var(--text-muted)', marginLeft: 'auto' }}>•••</span>
-        </div>
       </div>
     </aside>
   );

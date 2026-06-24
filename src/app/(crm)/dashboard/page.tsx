@@ -11,32 +11,46 @@ const kpis = [
 ];
 
 const pipelineStages = [
-  { id: 'new', label: 'New Enquiry', color: 'new', deals: [
-    { name: 'Riya Sharma', company: 'BloomAds', value: '₹45K', owner: 'JS' },
-    { name: 'Karthik R.', company: 'TechVibe', value: '₹80K', owner: 'AM' },
-    { name: 'Meera N.', company: 'FreshBrand', value: '₹30K', owner: 'JS' },
-  ]},
-  { id: 'engaged', label: 'Engaged', color: 'engaged', deals: [
-    { name: 'Arjun Mehta', company: 'GrowthLab', value: '₹1.2L', owner: 'SA' },
-    { name: 'Priya K.', company: 'NexaDigital', value: '₹60K', owner: 'JS' },
-  ]},
-  { id: 'qualified', label: 'Qualified', color: 'qualified', deals: [
-    { name: 'Sameer P.', company: 'MediaCo', value: '₹95K', owner: 'AM' },
-    { name: 'Divya T.', company: 'BrandNest', value: '₹2.1L', owner: 'SA' },
-  ]},
-  { id: 'proposal', label: 'Proposal Sent', color: 'proposal', deals: [
-    { name: 'Raj Verma', company: 'ScaleUp', value: '₹1.8L', owner: 'JS' },
-  ]},
-  { id: 'negotiation', label: 'Negotiation', color: 'negotiation', deals: [
-    { name: 'Ananya S.', company: 'ClickFarm', value: '₹3.5L', owner: 'AM' },
-    { name: 'Vikram L.', company: 'AdSphere', value: '₹2.8L', owner: 'JS' },
-  ]},
-  { id: 'won', label: 'Closed Win', color: 'won', deals: [
-    { name: 'Nisha D.', company: 'BoldMark', value: '₹4.2L', owner: 'SA' },
-  ]},
-  { id: 'lost', label: 'Closed Lose', color: 'lost', deals: [
-    { name: 'Mohit B.', company: 'SprintCo', value: '₹70K', owner: 'AM' },
-  ]},
+  {
+    id: 'new', label: 'New Enquiry', color: 'new', deals: [
+      { name: 'Riya Sharma', company: 'BloomAds', value: '₹45K', owner: 'JS' },
+      { name: 'Karthik R.', company: 'TechVibe', value: '₹80K', owner: 'AM' },
+      { name: 'Meera N.', company: 'FreshBrand', value: '₹30K', owner: 'JS' },
+    ]
+  },
+  {
+    id: 'engaged', label: 'Engaged', color: 'engaged', deals: [
+      { name: 'Arjun Mehta', company: 'GrowthLab', value: '₹1.2L', owner: 'SA' },
+      { name: 'Priya K.', company: 'NexaDigital', value: '₹60K', owner: 'JS' },
+    ]
+  },
+  {
+    id: 'qualified', label: 'Qualified', color: 'qualified', deals: [
+      { name: 'Sameer P.', company: 'MediaCo', value: '₹95K', owner: 'AM' },
+      { name: 'Divya T.', company: 'BrandNest', value: '₹2.1L', owner: 'SA' },
+    ]
+  },
+  {
+    id: 'proposal', label: 'Proposal Sent', color: 'proposal', deals: [
+      { name: 'Raj Verma', company: 'ScaleUp', value: '₹1.8L', owner: 'JS' },
+    ]
+  },
+  {
+    id: 'negotiation', label: 'Negotiation', color: 'negotiation', deals: [
+      { name: 'Ananya S.', company: 'ClickFarm', value: '₹3.5L', owner: 'AM' },
+      { name: 'Vikram L.', company: 'AdSphere', value: '₹2.8L', owner: 'JS' },
+    ]
+  },
+  {
+    id: 'won', label: 'Closed Win', color: 'won', deals: [
+      { name: 'Nisha D.', company: 'BoldMark', value: '₹4.2L', owner: 'SA' },
+    ]
+  },
+  {
+    id: 'lost', label: 'Closed Lose', color: 'lost', deals: [
+      { name: 'Mohit B.', company: 'SprintCo', value: '₹70K', owner: 'AM' },
+    ]
+  },
 ];
 
 const funnel = [
@@ -113,7 +127,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Pipeline Kanban + Funnel */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: 16 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 280px', gap: 16 }}>
         {/* Kanban */}
         <div className="card" style={{ padding: '16px 18px' }}>
           <div className="section-header">

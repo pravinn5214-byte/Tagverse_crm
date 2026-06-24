@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 
 const kpis = [
   { label: 'Conversion Rate', value: '18.2%', delta: '+2.4%', isUp: true, icon: '📈', color: 'blue' },
@@ -8,11 +9,11 @@ const kpis = [
 ];
 
 const funnelData = [
-  { stage: 'LEADS', value: 840, conversion: '72%', totalPct: '100%' },
-  { stage: 'QUALIFIED', value: 605, conversion: '62%', totalPct: '72%' },
-  { stage: 'PROPOSAL', value: 375, conversion: '63%', totalPct: '45%' },
-  { stage: 'NEGOTIATION', value: 236, conversion: '64%', totalPct: '28%' },
-  { stage: 'CLOSING', value: 151, conversion: '-', totalPct: '18%' },
+  { stage: 'LEADS', value: 840, conversion: '72%', totalPct: '100%', color: '#3b82f6' },
+  { stage: 'QUALIFIED', value: 605, conversion: '62%', totalPct: '72%', color: '#7c5cbf' },
+  { stage: 'PROPOSAL', value: 375, conversion: '63%', totalPct: '45%', color: '#f59e0b' },
+  { stage: 'NEGOTIATION', value: 236, conversion: '64%', totalPct: '28%', color: '#f97316' },
+  { stage: 'CLOSING', value: 151, conversion: '-', totalPct: '18%', color: '#10b981' },
 ];
 
 const performanceMetrics = [
@@ -30,9 +31,11 @@ const aiInsights = [
 ];
 
 export default function FunnelPage() {
+  const [hoveredStage, setHoveredStage] = useState<string | null>(null);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, height: '100%', paddingBottom: 24 }}>
-      
+
       {/* Top Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', gap: 12 }}>
@@ -68,10 +71,10 @@ export default function FunnelPage() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 24 }}>
-        
+
         {/* Left Area */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          
+
           {/* Funnel Visualization */}
           <div className="card">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 30 }}>
@@ -84,49 +87,49 @@ export default function FunnelPage() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', padding: '0 20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', maxWidth: '600px', margin: '0 auto', padding: '20px 20px', gap: 0, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.1))' }}>
               {funnelData.map((stage, i) => {
-                const width = 100 - (i * 12);
-                const opacity = 1 - (i * 0.15);
-                const isLast = i === funnelData.length - 1;
+                const top_pct = parseInt(stage.totalPct);
+                const bottom_pct = i < funnelData.length - 1 ? parseInt(funnelData[i+1].totalPct) : top_pct;
+                const isHovered = hoveredStage === stage.stage;
                 
                 return (
-                  <div key={stage.stage} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-                    {/* Stage Bar */}
-                    <div style={{ 
-                      width: `${width}%`, 
-                      background: isLast ? 'transparent' : `rgba(59, 130, 246, ${opacity})`, 
-                      border: isLast ? '1px solid var(--border)' : 'none',
-                      color: isLast ? 'var(--text-muted)' : '#fff',
-                      padding: '12px 0', 
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      alignItems: 'center', 
+                  <div 
+                    key={stage.stage} 
+                    onMouseEnter={() => setHoveredStage(stage.stage)}
+                    onMouseLeave={() => setHoveredStage(null)}
+                    style={{ 
+                      width: '100%', 
+                      height: isHovered ? '90px' : '70px',
+                      background: stage.color, 
+                      clipPath: `polygon(${(100 - top_pct) / 2}% 0%, ${(100 + top_pct) / 2}% 0%, ${(100 + bottom_pct) / 2}% 100%, ${(100 - bottom_pct) / 2}% 100%)`,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
                       justifyContent: 'center',
+                      color: '#ffffff',
+                      textShadow: '0 1px 2px rgba(0,0,0,0.4)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transform: isHovered ? 'scale(1.02)' : 'scale(1)',
+                      zIndex: isHovered ? 10 : 1,
                       position: 'relative'
                     }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1 }}>{stage.stage}</div>
-                      <div style={{ fontSize: 16, fontWeight: 700, marginTop: 2 }}>{stage.value}</div>
+                    <div style={{ fontSize: isHovered ? 18 : 14, fontWeight: 700, transition: 'all 0.3s' }}>
+                      {stage.totalPct}
                     </div>
-                    
-                    {/* Connection/Conversion text */}
-                    {!isLast && (
-                      <div style={{ margin: '8px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <div style={{ fontSize: 10, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <span style={{ fontSize: 12 }}>↘</span> {stage.conversion} Conversion
-                        </div>
-                        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 2 }}>
-                          {funnelData[i + 1].totalPct} of Total
-                        </div>
+                    {isHovered ? (
+                      <div style={{ fontSize: 13, fontWeight: 600, opacity: 1, marginTop: 4, letterSpacing: 0.5 }}>
+                        {stage.stage} — {stage.value} Deals ({stage.conversion} Conv.)
+                      </div>
+                    ) : (
+                      <div style={{ fontSize: 11, fontWeight: 600, opacity: 0.9, marginTop: 2, letterSpacing: 0.5 }}>
+                        {stage.stage} - {stage.value}
                       </div>
                     )}
                   </div>
                 );
               })}
-              {/* Last stage text */}
-              <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 8 }}>
-                18% of Total
-              </div>
             </div>
           </div>
 
@@ -154,9 +157,9 @@ export default function FunnelPage() {
                         <span style={{ fontSize: 14 }}>⏱</span> {m.time}
                       </td>
                       <td style={{ padding: '14px 0', textAlign: 'right' }}>
-                        <span style={{ 
-                          fontSize: 11, fontWeight: 700, color: m.dropColor === 'var(--rose)' ? '#fff' : m.dropColor, 
-                          background: m.dropColor === 'var(--rose)' ? 'var(--rose)' : 'var(--bg-card)', 
+                        <span style={{
+                          fontSize: 11, fontWeight: 700, color: m.dropColor === 'var(--rose)' ? '#fff' : m.dropColor,
+                          background: m.dropColor === 'var(--rose)' ? 'var(--rose)' : 'var(--bg-card)',
                           padding: '3px 8px', borderRadius: 12,
                           border: m.dropColor === 'var(--rose)' ? 'none' : '1px solid var(--border)'
                         }}>{m.dropoff}</span>
@@ -172,14 +175,14 @@ export default function FunnelPage() {
 
         {/* Right Area */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          
+
           {/* AI Optimization */}
           <div style={{ background: 'var(--blue-dim)', border: '1px solid rgba(59, 130, 246, 0.2)', borderRadius: 12, padding: 20 }}>
             <h3 style={{ fontSize: 15, fontWeight: 600, margin: 0, color: 'var(--blue)', display: 'flex', alignItems: 'center', gap: 8 }}>
               💡 AI Optimization
             </h3>
             <p style={{ fontSize: 11, color: 'var(--text-secondary)', margin: '4px 0 20px 0' }}>Generated based on Q3 pipeline trends</p>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {aiInsights.map((insight, i) => (
                 <div key={i} style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border)', borderRadius: 8, padding: 16 }}>
@@ -200,13 +203,13 @@ export default function FunnelPage() {
           <div className="card">
             <h3 style={{ fontSize: 14, fontWeight: 600, margin: '0 0 4px 0', color: 'var(--text-primary)' }}>Drop-off Distribution</h3>
             <p style={{ fontSize: 11, color: 'var(--text-muted)', margin: '0 0 20px 0' }}>Frequency of deals exiting the funnel</p>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, position: 'relative' }}>
               {/* Grid lines */}
               <div style={{ position: 'absolute', top: 0, left: 80, right: 0, bottom: 0, display: 'flex', justifyContent: 'space-between', zIndex: 0 }}>
-                {[1,2,3,4].map(line => <div key={line} style={{ width: 1, height: '100%', background: 'var(--border)', borderStyle: 'dashed' }} />)}
+                {[1, 2, 3, 4].map(line => <div key={line} style={{ width: 1, height: '100%', background: 'var(--border)', borderStyle: 'dashed' }} />)}
               </div>
-              
+
               {[
                 { stage: 'Leads', pct: 90 },
                 { stage: 'Qualified', pct: 60 },
@@ -230,7 +233,7 @@ export default function FunnelPage() {
               <h3 style={{ fontSize: 14, fontWeight: 600, margin: 0, color: 'var(--text-primary)' }}>Win/Loss Ratio</h3>
               <div style={{ fontSize: 10, color: 'var(--text-secondary)', background: 'var(--bg-card-hover)', padding: '4px 8px', borderRadius: 12, border: '1px solid var(--border)' }}>Current Quarter</div>
             </div>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
                 { label: 'Won Deals', pct: '64%', color: 'var(--blue)' },
@@ -252,7 +255,7 @@ export default function FunnelPage() {
 
         </div>
       </div>
-      
+
     </div>
   );
 }
